@@ -184,7 +184,7 @@ with col2:
     )
 
 # Show HTML preview
-st.subheader("HTML Preview")
+st.subheader("HTML Preview (ใช้ดูคร่าวๆเท่านั้น)")
 st.components.v1.html(full_html_content, height=800, scrolling=True)
 
         
