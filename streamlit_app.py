@@ -177,7 +177,7 @@ with col2:
         )
     # Download button
     st.download_button(
-        label="📥 Download HTML",
+        label="📥 Download .TEXT",
         data=full_html_content.encode("utf-8"),
         file_name="tv_spec.text",
         mime="text"
