@@ -5,10 +5,12 @@ import re
 # --- Streamlit App ---
 st.title("HTML Generator V.1.03")
 
+full_html_content=""
+
+
 col1, col2 = st.columns(2)
 with col1:
-    st.text("Initial Spec Text")
-    text = st.text_area("ใส่ข้อมูลที่นี่", height=200)
+    text = st.text_area("Text Here", height=200)
     if st.button("Generate HTML"):
         if not text.strip():
             st.warning("กรุณาใส่ข้อมูลสเปคก่อน")
@@ -166,8 +168,6 @@ with col1:
 
 # ============================================================================
 with col2:
-    
-    st.text("HTML Code")
     # Show full HTML content in a scrollable text area
     st.text_area(
         label="Copy this HTML",
@@ -184,7 +184,7 @@ with col2:
     )
 
 # Show HTML preview
-st.subheader("📄 Generated HTML Preview")
+st.subheader("HTML Preview")
 st.components.v1.html(full_html_content, height=800, scrolling=True)
 
         
