@@ -170,7 +170,7 @@ with col1:
 with col2:
     # Show full HTML content in a scrollable text area
     st.text_area(
-        label="Copy this HTML",
+        label="Copy this HTML (ต้องเปลี่ยน Title ภายหลัง)",
         value=full_html_content,
         height=200,
         # label_visibility="collapsed"
