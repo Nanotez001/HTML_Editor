@@ -2,11 +2,14 @@ import streamlit as st
 import pandas as pd
 import re
 
-# --- Streamlit App ---
-st.title("HTML Generator V.1.03")
+
+# Sidebar
+# st.sidebar.selectbox(label= "Platform",options = ["LG","Samsung"])
+#===========================================================================
+
+st.title("HTML Generator V.1.10")
 
 full_html_content=""
-
 
 col1, col2 = st.columns(2)
 with col1:
@@ -16,63 +19,60 @@ with col1:
             st.warning("กรุณาใส่ข้อมูลสเปคก่อน")
             st.stop()
     # ============================================================================
-
+        # Cut all Line & Clear Space
         lines = [line.strip() for line in text.strip().split('\n') if line.strip()]
         adjusted_category_headers = [
-            "สเปค", "ย่อ", "ภาพรวม", "Display", "Video", "Audio", "Smart Service",
+            "ภาพรวม","Product Type","Display","Video","Audio", "Smart Service",
             "Smart Feature", "Game Feature", "Tuner/Broadcasting", "Connectivity",
             "Design", "Additional Feature", "Accessibility", "Power & Eco Solution",
             "Dimension", "Weight", "Accessory"
         ]
+        # Del Exceptional Text
+        del_line = ["สเปค","ย่อ"]
+        lines = [line for line in lines if line not in del_line]
 
+        # Fill in DF
         data_rows = []
+        i = 0
         current_category = None
-        skip_next = False
-
-        for i in range(len(lines)):
-            if skip_next:
-                skip_next = False
-                continue
-
+        header_queue = adjusted_category_headers.copy()
+        while i < len(lines):
             line = lines[i].strip()
-            if not line:
-                continue
 
-            if line in adjusted_category_headers:
-                current_category = line
+            # Check if this line is the next expected category
+            if header_queue and line == header_queue[0]:
+                current_category = header_queue.pop(0)
+                i += 1
                 continue
 
             spec_name = line
             spec_value = ""
 
-            if (i + 1 < len(lines)) and (lines[i+1].strip() not in adjusted_category_headers):
-                spec_value = lines[i+1].strip()
-                skip_next = True
+            # If next line exists and is not the next header
+            if i + 1 < len(lines):
+                next_line = lines[i + 1].strip()
+                if not (header_queue and next_line == header_queue[0]):
+                    spec_value = next_line
+                    i += 1  # skip next line
 
-            data_rows.append({"Category": current_category, "Specification": spec_name, "Value": spec_value})
-
+            data_rows.append({
+                "Category": current_category,
+                "Specification": spec_name,
+                "Value": spec_value
+            })
+            i += 1
         df = pd.DataFrame(data_rows)
-        df_cleaned = df[~df['Category'].isin(['สเปค', 'ย่อ'])].copy()
 
-        df_cleaned.loc[df_cleaned['Category'] == 'ภาพรวม', 'Category'] = 'Overall Summary'
-        df_cleaned.loc[(df_cleaned['Category'] == 'Overall Summary') & (df_cleaned['Specification'] == 'Refresh Rate'), 'Specification'] = 'Overall Refresh Rate'
-        df_cleaned.loc[(df_cleaned['Category'] == 'Overall Summary') & (df_cleaned['Specification'] == 'Resolution'), 'Specification'] = 'Overall Resolution'
-        df_cleaned.loc[(df_cleaned['Category'] == 'Overall Summary') & (df_cleaned['Specification'] == 'Video'), 'Specification'] = 'Overall Video Processor'
-        df_cleaned.loc[(df_cleaned['Category'] == 'Overall Summary') & (df_cleaned['Specification'] == 'Design'), 'Specification'] = 'Overall Design Style'
-        df_cleaned.loc[(df_cleaned['Category'] == 'Overall Summary') & (df_cleaned['Specification'] == 'Product Type'), 'Specification'] = 'Overall Product Type'
+        # Change Name
+        df.loc[df['Category'] == 'ภาพรวม', 'Category'] = 'Overall'
+        
+        # Fill empty slot
+        mask = df['Value'].isnull() | (df['Value'].astype(str).str.strip() == "")
 
-        df_cleaned = df_cleaned[df_cleaned['Category'] != 'Overall Summary']
-        df_cleaned = df_cleaned.reset_index(drop=True)
-
-        order = [
-            "Display", "Video", "Audio", "Smart Service", "Smart Feature",
-            "Game Feature", "Tuner/Broadcasting", "Connectivity",
-            "Design", "Additional Feature", "Accessibility",
-            "Power & Eco Solution", "Dimension", "Weight", "Accessory"
-        ]
-        df_cleaned['Category'] = pd.Categorical(df_cleaned['Category'], categories=order, ordered=True)
-        df_cleaned = df_cleaned.sort_values(['Category', 'Specification'])
-
+        df.loc[mask, 'Value'] = df.loc[mask, 'Specification']
+        df.loc[mask, 'Specification'] = df.loc[mask, 'Category']
+        # ===========================================================================
+        # HTML Head
         html_head = """
         <html lang="th">
         <head>
@@ -130,29 +130,44 @@ with col1:
         <div class="container">
         """
 
+        # ===========================================================================
+        # Spec Intro
+        operating_system =  df[df['Specification'] == 'Operating System']['Value'].iloc[0]
+        hdmi = df[df['Specification'] == 'HDMI']['Value'].iloc[0]
+        screen_size = df[df['Specification'] == 'Screen Size']['Value'].iloc[0]
+        product_type = df[df['Specification'] == 'Product Type']['Value'].iloc[0]
+        processor = df[df['Specification'] == 'Video']['Value'].iloc[0]
+
         summary_list_items = []
-        if 'Operating System' in df_cleaned['Specification'].values:
+        if 'Operating System' in df['Specification'].values:
             summary_list_items.append(
-                f"<li>ระบบปฏิบัติการ  {df_cleaned[df_cleaned['Specification'] == 'Operating System']['Value'].iloc[0]}</li>"
+                f"<li>ระบบปฏิบัติการ  {operating_system}</li>"
             )
-        if 'HDMI' in df_cleaned['Specification'].values:
+        if 'Video' in df['Specification'].values:
             summary_list_items.append(
-                f"<li>การเชื่อมต่อ HDMI  {df_cleaned[df_cleaned['Specification'] == 'HDMI']['Value'].iloc[0]} ช่อง</li>"
+                f"<li>ชิปประมวลผล {processor} </li>"
             )
-        if 'Screen Size' in df_cleaned['Specification'].values:
+        if 'HDMI' in df['Specification'].values:
             summary_list_items.append(
-                f"<li>ขนาดหน้าจอ  {df_cleaned[df_cleaned['Specification'] == 'Screen Size']['Value'].iloc[0]}</li>"
+                f"<li>การเชื่อมต่อ HDMI x {hdmi}</li>"
             )
-        if 'Product Type' in df_cleaned['Specification'].values:
+        # if 'Screen Size' in df['Specification'].values:
+        #     summary_list_items.append(
+        #         f"<li>ขนาดหน้าจอ  {screen_size}</li>"
+        #     )
+        if 'Product Type' in df['Specification'].values:
             summary_list_items.append(
-                f"<li>ประเภทผลิตภัณฑ์  {df_cleaned[df_cleaned['Specification'] == 'Product Type']['Value'].iloc[0]}</li>"
+                f"<li> {product_type} Panel</li>"
             )
 
-        html_body_content = f"<h3>Title</h3>\n"
+        # ===========================================================================
+        # HTML Body
+        html_body_content = f"<h3> [Title] </h3>\n"
         if summary_list_items:
             html_body_content += "<ul>\n" + "\n".join(summary_list_items) + "\n</ul>\n"
 
-        grouped_data = df_cleaned.groupby('Category')
+        grouped_data = df.groupby('Category', sort=False)
+
         for category_name, group in grouped_data:
             html_body_content += f"<h3>{category_name}</h3>\n"
             html_body_content += """<table class="spec-table">"""
