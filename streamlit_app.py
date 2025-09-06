@@ -24,8 +24,8 @@ full_html_content=""
 # Header
 col1, col2 = st.columns(2)
 with col1:
-    header_text = st.text_input("Header")
-    
+    # header_text = st.text_input("Header")
+    pass
 with col2:
     pass
 # Subheader
