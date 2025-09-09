@@ -16,12 +16,11 @@ html_head = """
     width: 100%;
     box-sizing: border-box;
   }
-
+  table.spec-table,  
   table.spec-table tr {
     margin-bottom: 10px;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 4px;
+    padding: 1px;
     background: none;
     word-wrap: break-word;  
     overflow-wrap: break-word; 

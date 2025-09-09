@@ -3,19 +3,11 @@ from html import escape
 def generate_h_text(platform: str) -> str:
     if platform == "All":
         texts = """
-            Luckydigital,
-            LD,
-            ลัคกี้ดิจิตอล,
-            ลัคกี้,
-            Waaa, got me!
+            LG,SAMSUNG,TV,Luckydigital,LD,ลัคกี้ดิจิตอล,ลัคกี้,Waaa, got me!
             """
     elif platform == "JJT":
         texts = """
-            Jingjungto,
-            JJT,
-            จริงจังโต,
-            จริงจัง,
-            Waaa, got me!
+            LG Smart TV 2025,LG OLED TV 2025,LG QLED TV 2025,LG TV 2025,สมาร์ททีวี LG,LG,SAMSUNG,TV,Jingjungto,JJT,จริงจังโต,จริงจัง,Waaa, got me!
             """
         
     # Use a color close to background (white) and small font
