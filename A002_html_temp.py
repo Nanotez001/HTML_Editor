@@ -5,47 +5,15 @@ html_head = """
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
-@media (max-width: 600px) {
-  table.spec-table,
-  table.spec-table thead,
-  table.spec-table tbody,
-  table.spec-table th,
-  table.spec-table td,
-  table.spec-table tr {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  table.spec-table,  
-  table.spec-table tr {
-    margin-bottom: 10px;
-    border-radius: 8px;
-    padding: 1px;
-    background: none;
-    word-wrap: break-word;  
-    overflow-wrap: break-word; 
-    white-space: normal;     
-  }
-
-  table.spec-table th,
-  table.spec-table td {
-    padding: 7px 0;
-    border: none;
-    border-radius: 5px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-    text-indent: 5px;
-  }
-}
 
 body {
-    font-family: 'Sarabun','Kanit', 'Noto Sans Thai',sans-serif;
+    font-family: 'Noto Sans Thai','Sarabun','Kanit', 'Noto Sans Thai',sans-serif;
     margin: 20px;
     background-color: #f9f9f9;
     color: #333;
 }
 .container {
+    
     max-width: 900px;
     margin: auto;
     background: #fff;
@@ -62,9 +30,13 @@ h2 {
     margin-top: 30px;
     border-bottom: 2px solid #ddd;
     padding-bottom: 5px;
+    margin-bottom: 1px; /* reduce space under title */
 }
 h3 {
     font-size: 1.5rem;
+    text-indent: 5px;
+    margin-top: 8px;
+    margin-bottom: 1px; /* reduce space under title */
 }
 ul {
     list-style: disc;
@@ -78,7 +50,6 @@ table.spec-table {
 th, td {
     padding: 7px 0;
     border: none;
-    border-radius: 5px;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
@@ -86,6 +57,46 @@ th, td {
 }
 th {
     background-color: #f0f0f0;
+    width: 250px;   /* adjust to your needs */
+    min-width: 200px; /* prevent shrinking too much */
+    max-width: 400px; /* optional limit */
+}
+@media (max-width: 600px) {
+  table.spec-table,
+  table.spec-table thead,
+  table.spec-table tbody,
+  table.spec-table th,
+  table.spec-table td,
+  table.spec-table tr {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  table.spec-table,  
+  table.spec-table tr {
+    margin-bottom: 10px;
+    
+    border-radius: 8px;
+    padding: 1px;
+    background: none;
+    word-wrap: break-word;  
+    overflow-wrap: break-word; 
+    white-space: normal;     
+  }
+  table.spec-table {
+    border: 3px solid #f0f0f0;
+    border-radius: 8px;
+    }
+  table.spec-table th,
+  table.spec-table td {
+    padding: 7px 0;
+    border: none;
+    border-radius: 5px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    text-indent: 5px;
+  }
 }
 
 </style>

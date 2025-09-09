@@ -12,7 +12,7 @@ st.set_page_config(
 )
 #===========================================================================
 
-st.title("HTML Generator V.1.25")
+st.title("HTML Generator V.1.35")
 input_platform = st.sidebar.selectbox(label="Source", options=["LG", "Samsung"])
 output_platform = st.sidebar.selectbox(label="Platform", options=["All", "JJT"])
 h_text = st.sidebar.checkbox("Hidden Text",value=True)
@@ -162,13 +162,14 @@ with col1:
         grouped_data = df.groupby('Category', sort=False)
         # Create tables
         for category_name, group in grouped_data:
-            html_body_content += f"<h3>{category_name}</h3>\n"
+            html_body_content += f"""<h3><span style="font-family: 'Noto Sans Thai';">{category_name}</span></h3>\n"""
             html_body_content += """<table class="spec-table">"""
             for _, row in group.iterrows():
                 spec = row['Specification']
                 value = row['Value']
                 display_value = value if value else "-"
-                html_body_content += f"<tr><th>{spec}</th><td>{display_value}</td></tr>\n"
+                html_body_content += f"""<tr><th><span style="font-family: 'Noto Sans Thai';">{spec}\
+                    </span></th><td><span style="font-family: 'Noto Sans Thai';">{display_value}</span></td></tr>\n"""
             html_body_content += "</table>\n"
 
         # HTML footer
