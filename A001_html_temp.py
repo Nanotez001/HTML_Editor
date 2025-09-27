@@ -15,6 +15,12 @@ padding: 1rem;
 background: #f8f8f8;
 color: #333;
 }
+th {
+    background-color: #f0f0f0;
+    width: 250px;   /* adjust to your needs */
+    min-width: 200px; /* prevent shrinking too much */
+    max-width: 400px; /* optional limit */
+}
 .container {
 background: #fff;
 border-radius: 12px;

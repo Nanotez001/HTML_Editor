@@ -4,6 +4,7 @@ import A001_html_temp
 import A002_html_temp
 import category_headers
 import hiddenmask
+import regex
 
 # Sidebar
 st.set_page_config(
@@ -24,16 +25,14 @@ full_html_content=""
 # Header
 col1, col2 = st.columns(2)
 with col1:
-    # header_text = st.text_input("Header")
-    pass
+    header_text = st.text_input("Header",value="""ทีวี 97" LG SIGNATURE OLED M5 Wireless 4K Smart TV 2025 OLED97M5PSA""")
 with col2:
-    pass
-# Subheader
-col1, col2 = st.columns(2)
-with col1:
-    pass
-with col2:
-    pass
+    subheader_text = st.text_input("Subheader",value="OLED97M5PSA")
+#===========================================================================
+extracted_info = regex.extract_tv_details([subheader_text]) 
+extract_editor = st.data_editor(extracted_info)
+#===========================================================================
+
 # Details
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -91,8 +90,24 @@ with col1:
                 "Value": spec_value
             })
             i += 1
+        # ===========================================================================
         df = pd.DataFrame(data_rows)
+        # Combination of 'Category' and 'Specification'
+        df['Category_Specification'] = df['Category'] + ' / ' + df['Specification']
+
+        # Drop the original 'Category' and 'Specification' columns
+        # df = df.drop(columns=['Category', 'Specification'])
+        df = df[['Category_Specification','Category','Specification','Value']]
+        
         st.dataframe(df)
+
+        df_extract = df[['Category_Specification','Value']]
+        pivoted_df = df_extract.set_index('Category_Specification')[['Value']].T
+        pivoted_df.reset_index(drop=True, inplace=True)
+
+        df_mix = pd.concat([extract_editor, pivoted_df], axis=1)
+
+        st.dataframe(df_mix.T)
         # ===========================================================================
         # # Change Name
         # df.loc[df['Category'] == 'ภาพรวม', 'Category'] = 'Overall'
