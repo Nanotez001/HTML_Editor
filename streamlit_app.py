@@ -109,25 +109,7 @@ with col1:
 
         st.dataframe(df_mix.T)
         # ===========================================================================
-        # # Change Name
-        # df.loc[df['Category'] == 'ภาพรวม', 'Category'] = 'Overall'
-        
-        # # Fill empty slot
-        # mask = df['Value'].isnull() | (df['Value'].astype(str).str.strip() == "")
 
-        # df.loc[mask, 'Value'] = df.loc[mask, 'Specification']
-        # df.loc[mask, 'Specification'] = df.loc[mask, 'Category']
-        # # ===========================================================================
-        # # HTML Header
-        # screen_size = df[df['Specification'] == 'Screen Size']['Value'].iloc[0].replace('"', '')
-        # product_id = ""
-        # header_lines = [x.strip() for x in re.split(r'[" ]{2,}|["]', header_text) if x.strip()]
-        # if header_lines:
-        #     product_id = header_lines[-1]
-        #     product_description = " ".join(header_lines[1:-1])
-
-        # output_header = f"{input_platform} {screen_size} นิ้ว รุ่น {product_id} {product_description}"
-        # # ===========================================================================
         # HTML subbody
         if output_platform == "All":
             html_head = A001_html_temp.html_head
